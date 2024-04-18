@@ -1,4 +1,4 @@
-                                                                                 Medical Appointment Scheduler
+Medical Appointment Scheduler
 
 The Medical Appointment Scheduler is a web application built using Flask, a lightweight Python web framework, designed to help manage appointments and patients in a medical practice. This project utilizes an SQLite database for storing appointment and patient information, allowing for efficient data management and retrieval.
 
