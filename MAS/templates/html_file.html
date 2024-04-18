@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Appointment Scheduler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 40px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="email"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        img {
+            display: block;
+            margin: 0 auto;
+            margin-top: 20px;
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Medical Appointment Scheduler</h1>
+
+        <h2>Appointments</h2>
+        <ul id="appointments-list"></ul>
+        <form id="appointment-form">
+            <label for="patient">Patient:</label>
+            <input type="text" id="patient" name="patient" required>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+            <button type="submit">Add Appointment</button>
+        </form>
+
+        <h2>Patients</h2>
+        <ul id="patients-list"></ul>
+        <form id="patient-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <button type="submit">Add Patient</button>
+        </form>
+
+    </div>
+
+    <script>
+        // Function to fetch appointments from the backend and display them
+        function fetchAppointments() {
+            fetch('http://localhost:5001/appointments')
+                .then(response => response.json())
+                .then(data => {
+                    const appointmentsList = document.getElementById('appointments-list');
+                    appointmentsList.innerHTML = '';
+                    data.forEach(appointment => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${appointment.patient} - ${appointment.date}`;
+                        appointmentsList.appendChild(listItem);
+                    });
+                });
+        }
+
+        // Function to fetch patients from the backend and display them
+        function fetchPatients() {
+            fetch('http://localhost:5001/patients')
+                .then(response => response.json())
+                .then(data => {
+                    const patientsList = document.getElementById('patients-list');
+                    patientsList.innerHTML = '';
+                    data.forEach(patient => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${patient.name} - ${patient.email}`;
+                        patientsList.appendChild(listItem);
+                    });
+                });
+        }
+
+        // Event listener for the appointment form submission
+        document.getElementById('appointment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                patient: formData.get('patient'),
+                date: formData.get('date')
+            };
+            fetch('http://localhost:5001/appointments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(() => {
+                fetchAppointments();
+                event.target.reset();
+            });
+        });
+
+        // Event listener for the patient form submission
+        document.getElementById('patient-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email')
+            };
+            fetch('http://localhost:5001/patients', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(() => {
+                fetchPatients();
+                event.target.reset();
+            });
+        });
+
+        // Fetch appointments and patients when the page loads
+        fetchAppointments();
+        fetchPatients();
+    </script>
+</body>
+</html>
