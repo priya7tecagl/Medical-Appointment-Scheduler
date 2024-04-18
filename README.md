@@ -12,7 +12,7 @@ Usage:
 Clone the repository to your local machine.
 Install the required dependencies using pip install -r requirements.txt.
 Run the Flask application using python app.py.
-Access the application in your web browser at http://localhost:5000.
+Access the application in your web browser at http://localhost:5001.
 Technologies Used:
 Flask: Python web framework for building the backend of the application.
 SQLite: Lightweight relational database management system used for storing appointment and patient data.
@@ -23,3 +23,4 @@ Implement user authentication and authorization features for secure access.
 Add calendar integration to display appointments in a calendar format.
 Enhance the user interface with additional styling and interactive elements.
 Implement email notifications for appointment reminders and updates.
+Feel free to contribute to the project by submitting bug fixes, feature enhancements, or suggestions via GitHub pull requests and issues.
